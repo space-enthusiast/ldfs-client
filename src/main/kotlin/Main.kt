@@ -1,6 +1,8 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,14 +15,32 @@ import androidx.compose.ui.window.application
 @Composable
 @Preview
 fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
+
+    val tabOrder = listOf(TabType.LOCAL, TabType.LDFS)
+    var selectedTabIndex by remember { mutableStateOf(0) }
 
     MaterialTheme {
-        Button(onClick = {
-            text = "Hello, Desktop!"
-        }) {
-            println("hello world!!!!")
-            Text(text)
+        Column {
+            TabRow(selectedTabIndex = selectedTabIndex) {
+                tabOrder.forEachIndexed { index, tabType ->
+                    Tab(
+                        text = { Text(tabType.name) },
+                        selected = selectedTabIndex == index,
+                        onClick = {
+                            selectedTabIndex = index
+                        }
+                    )
+                }
+            }
+
+            when (tabOrder[selectedTabIndex]) {
+                TabType.LOCAL -> {
+                    LocalFileExplorerScreen()
+                }
+                TabType.LDFS -> {
+                    LdfsFileExplorerScreen()
+                }
+            }
         }
     }
 }
