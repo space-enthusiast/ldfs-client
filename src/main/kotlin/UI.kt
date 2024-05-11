@@ -89,8 +89,8 @@ fun LdfsFileExplorerScreen() {
                         // TODO: upload file to chunk servers
                         coroutineScopeScope.launch {
                             isLoading = true
-                            callKtor()
-                            delay(3000)
+                            createFileCreationRequest(selectedFile)
+//                            delay(3000)
                             isLoading = false
                         }
                     },
