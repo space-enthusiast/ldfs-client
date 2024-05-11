@@ -34,19 +34,23 @@ data class FileCreationOperation(
     val requests: List<ChunkCreationRequest>,
 )
 
-suspend fun createFileCreateRequest(filePath: String, directoryId: UUID,): FileCreationOperation {
+suspend fun createFileCreateRequest(
+    filePath: String,
+    directoryId: UUID,
+): FileCreationOperation {
     val file = File(filePath)
     val fileSize = file.length()
     val fileName = file.name
     val fileUuid = UUID.randomUUID()
     return FileCreationOperation(
         fileUuid = fileUuid,
-        requests = send(
-            fileSize = fileSize,
-            fileName = fileName,
-            directoryId = directoryId,
-            fileUuid = fileUuid,
-        )
+        requests =
+            send(
+                fileSize = fileSize,
+                fileName = fileName,
+                directoryId = directoryId,
+                fileUuid = fileUuid,
+            ),
     )
 }
 
@@ -58,22 +62,24 @@ private suspend fun send(
 ): List<ChunkCreationRequest> {
     val masterServerAddress = "http://192.168.199.72:8080"
     println("masterServerAddress: $masterServerAddress")
-    val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json()
+    val client =
+        HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json()
+            }
         }
-    }
-    val response: HttpResponse = client.post("$masterServerAddress/api/files/fileCreateOperation") {
-        contentType(ContentType.Application.Json)
-        setBody(
-            FileCreateOperationCreationRequest(
-                fileUuid = fileUuid,
-                fileSize = fileSize,
-                fileName = fileName,
-                directoryId = directoryId,
+    val response: HttpResponse =
+        client.post("$masterServerAddress/api/files/fileCreateOperation") {
+            contentType(ContentType.Application.Json)
+            setBody(
+                FileCreateOperationCreationRequest(
+                    fileUuid = fileUuid,
+                    fileSize = fileSize,
+                    fileName = fileName,
+                    directoryId = directoryId,
+                ),
             )
-        )
-    }
+        }
     client.close()
     return response.body<List<ChunkCreationRequest>>().also {
         println("res: $it")

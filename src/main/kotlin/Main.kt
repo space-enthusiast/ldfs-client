@@ -15,7 +15,6 @@ import androidx.compose.ui.window.application
 @Composable
 @Preview
 fun App() {
-
     val tabOrder = listOf(TabType.LOCAL, TabType.LDFS)
     var selectedTabIndex by remember { mutableStateOf(0) }
 
@@ -28,7 +27,7 @@ fun App() {
                         selected = selectedTabIndex == index,
                         onClick = {
                             selectedTabIndex = index
-                        }
+                        },
                     )
                 }
             }
@@ -45,8 +44,9 @@ fun App() {
     }
 }
 
-fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        App()
+fun main() =
+    application {
+        Window(onCloseRequest = ::exitApplication) {
+            App()
+        }
     }
-}

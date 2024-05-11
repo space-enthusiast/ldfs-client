@@ -32,7 +32,11 @@ import java.awt.Frame
 import java.util.UUID
 
 @Composable
-fun FileSelectorDialog(isDialogOpen: Boolean, onFileChosen: (String) -> Unit, onDismissRequest: () -> Unit) {
+fun FileSelectorDialog(
+    isDialogOpen: Boolean,
+    onFileChosen: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
     if (isDialogOpen) {
         Dialog(onDismissRequest = onDismissRequest) {
             LaunchedEffect(Unit) {
@@ -64,7 +68,6 @@ fun LocalFileExplorerScreen() {
 
 @Composable
 fun LdfsFileExplorerScreen() {
-
     var isDialogOpen by remember { mutableStateOf(false) }
     var selectedFile by remember { mutableStateOf("") }
     var selectedDirectoryId by remember { mutableStateOf<UUID?>(null) }
@@ -74,13 +77,14 @@ fun LdfsFileExplorerScreen() {
     Column(modifier = Modifier.fillMaxHeight()) {
         Box(modifier = Modifier.weight(1f)) {
             Text(
-                text = "LDFS FILE EXPLORER (in construction)"
+                text = "LDFS FILE EXPLORER (in construction)",
             )
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(2.dp, Color.DarkGray)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .border(2.dp, Color.DarkGray),
         ) {
             if (selectedFile != "") {
                 Text("Selected file: $selectedFile")
@@ -90,15 +94,16 @@ fun LdfsFileExplorerScreen() {
                         // TODO: upload file to chunk servers
                         coroutineScopeScope.launch {
                             isLoading = true
-                            val fileCreationRequest = createFileCreateRequest(
-                                filePath = selectedFile,
-                                directoryId = selectedDirectoryId ?: UUID.randomUUID(),
-                            )
+                            val fileCreationRequest =
+                                createFileCreateRequest(
+                                    filePath = selectedFile,
+                                    directoryId = selectedDirectoryId ?: UUID.randomUUID(),
+                                )
                             isLoading = false
                         }
                     },
                     enabled = isLoading.not(),
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.padding(4.dp),
                 ) {
                     if (isLoading) {
                         Text("uploading...")
@@ -116,7 +121,7 @@ fun LdfsFileExplorerScreen() {
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
                     onClick = { isDialogOpen = true },
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier.padding(4.dp),
                 ) {
                     Text("Choose File")
                 }

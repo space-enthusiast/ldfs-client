@@ -1,3 +1,4 @@
 enum class TabType {
-    LOCAL, LDFS
+    LOCAL,
+    LDFS,
 }
