@@ -24,12 +24,12 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.awt.EventQueue
 import java.awt.FileDialog
 import java.awt.Frame
+import java.util.UUID
 
 @Composable
 fun FileSelectorDialog(isDialogOpen: Boolean, onFileChosen: (String) -> Unit, onDismissRequest: () -> Unit) {
@@ -67,6 +67,7 @@ fun LdfsFileExplorerScreen() {
 
     var isDialogOpen by remember { mutableStateOf(false) }
     var selectedFile by remember { mutableStateOf("") }
+    var selectedDirectoryId by remember { mutableStateOf<UUID?>(null) }
     val coroutineScopeScope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(false) }
 
@@ -89,8 +90,10 @@ fun LdfsFileExplorerScreen() {
                         // TODO: upload file to chunk servers
                         coroutineScopeScope.launch {
                             isLoading = true
-                            createFileCreationRequest(selectedFile)
-//                            delay(3000)
+                            val fileCreationRequest = createFileCreateRequest(
+                                filePath = selectedFile,
+                                directoryId = selectedDirectoryId ?: UUID.randomUUID(),
+                            )
                             isLoading = false
                         }
                     },
