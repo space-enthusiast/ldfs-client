@@ -60,8 +60,7 @@ private suspend fun send(
     fileName: String,
     directoryId: UUID,
 ): List<ChunkCreationRequest> {
-    val masterServerAddress = "http://192.168.199.72:8080"
-    println("masterServerAddress: $masterServerAddress")
+    val masterServerAddress = System.getProperty("masterServerAddress")
     val client =
         HttpClient(CIO) {
             install(ContentNegotiation) {

@@ -1,6 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 val ktorVersion: String by project
+val masterServerAddress: String by project
 
 plugins {
     kotlin("jvm")
@@ -41,4 +42,8 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+tasks.withType<JavaExec> {
+    systemProperty("masterServerAddress", masterServerAddress)
 }
