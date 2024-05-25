@@ -66,9 +66,10 @@ private suspend fun send(
             install(ContentNegotiation) {
                 json()
             }
+            expectSuccess = true
         }
     val response: HttpResponse =
-        client.post("$masterServerAddress/api/files/fileCreateOperation") {
+        client.post("http://$masterServerAddress/api/files/fileCreateOperation") {
             contentType(ContentType.Application.Json)
             setBody(
                 FileCreateOperationCreationRequest(
